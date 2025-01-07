@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\tb_matrix;
 use Illuminate\Http\Request;
+use TbMatrix;
 use Yajra\DataTables\Facades\DataTables;
 
 class MatrixController extends Controller
@@ -53,6 +54,13 @@ class MatrixController extends Controller
             "panjang" => "required",
             "tinggi" => "required",
         ];
+
+        $matrix = tb_matrix::select('panjang')->where('panjang',$request->panjang)->where('tinggi',$request->tinggi)->get();
+
+        if ($matrix->isNotEmpty()) {
+            $response = responseFail(__('messages.delete-fail'), 'Data cannot created because the data same');
+            return response()->json($response, 500);
+        }
 
         $this->validate($request, $rules);
         $params = $request->only("panjang", "tinggi");
@@ -126,6 +134,14 @@ class MatrixController extends Controller
         ];
 
         $this->validate($request, $rules);
+
+
+        $matrix = tb_matrix::select('panjang')->where('panjang',$request->panjang)->where('tinggi',$request->tinggi)->get();
+
+        if ($matrix->isNotEmpty()) {
+            $response = responseFail(__('messages.delete-fail'), 'Data cannot created because the data same');
+            return response()->json($response, 500);
+        }
 
         $params = $request->only("panjang", "tinggi");
 
