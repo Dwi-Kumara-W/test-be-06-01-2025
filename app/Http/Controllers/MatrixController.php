@@ -77,8 +77,24 @@ class MatrixController extends Controller
     {
 
         $model = tb_matrix::where('id',$id)->firstOrFail();
+        $matrix = [];
+        for ($i = 1; $i <= $model->panjang; $i++) {
+            for ($j = 1; $j <= $model->tinggi; $j++) {
+                $matrix[] = [
+                    "x" => $i,
+                    "y" => $j,
+                    "value" => rand(1, 10),
+                ];
+            }
+        }
+        $response = [
+            "id" => $model->id,
+            "panjang" => $model->panjang,
+            "tinggi" => $model->tinggi,
+            "randomized_matrix" => $matrix,
+        ];
         return response()->json(
-            responseSuccess(__("messages.read-success"), $model)
+            responseSuccess(__("messages.read-success"), $response)
         );
     }
 
